@@ -22,7 +22,7 @@ from script.py import *
 Then you get possibilities to use script func in django-shell.
 
 You need to define the variable like, kid, it will contain the instance of the Schoolkid class, example:
-```
+```python
 schoolkid = get_schoolkid('Василий Пупкин', 'Б', 8)
 ```
 Then you can use other functions.
