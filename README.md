@@ -33,33 +33,33 @@ Then you can use other functions.
 - `full_name` - string, part name of schoolkid you want to fix ifromation, like: 'Пупкин Василий'
 - `study_year` - integer, class year of this person
 - `class_letter` - upper case string char of person group, like: 'A'
-- `bad_mark` - integer, mark in db 
+- `bad_mark_threshold` - integer, mark that used as a threshold for finding grades below it. 
 - `subject` - string, subject, like: 'Математика'
 - `commendation_text` - string, like: 'Хвалю!'
 - `lesson_number` - integer, number of specific lesson, default = None, then func will choose random lesson.
 
-Fix all bad marks less or equal `bad_mark` arg to best grade (default = 5) for one schoolkid:
-```
-fix_marks(schoolkid, bad_mark)
+Fix all bad marks less or equal `bad_mark_threshold` arg to best grade (default = 5) for one schoolkid:
+```python
+fix_marks(schoolkid, bad_mark_threshold)
 ```
 
 Delete chastisements for schoolkid:
-```
+```python
 fix_chastisement(schoolkid)
 ```
 
 Show count number of subject for schoolkid:
-```
+```python
 show_lessons_count(schoolkid, subject)
 ```
 
 Create commendation for schoolkid:
-```
+```python
 create_commendation(schoolkid, subject, commendation_text, lesson_number)
 ```
 
 If you whant to overrite the variable that you define before, use:
-```
+```python
 schoolkid = get_schoolkid(full_name, class_letter, study_year)
 ```
 
