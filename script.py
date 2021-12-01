@@ -1,7 +1,4 @@
-import random
-
 from django.http import Http404
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 
 from datacenter.models import Schoolkid, Mark, Chastisement, Lesson, Commendation
 
@@ -13,15 +10,17 @@ def get_schoolkid(full_name, class_letter, study_year):
             group_letter=class_letter.upper(),
             year_of_study=study_year
         )
-    except ObjectDoesNotExist:
-        raise Http404('No matches in the db')
-    except MultipleObjectsReturned:
-        raise Http404('Find more than one schoolkid')
+    except Schoolkid.DoesNotExist:
+        print('No matches in the db')
+        return None
+    except Schoolkid.MultipleObjectsReturned:
+        print('Find more that one schoolkid')
+        return None
 
 
-def fix_marks(schoolkid, bad_mark):
+def fix_marks(schoolkid, bad_mark_threshold):
     bad_marks = Mark.objects.filter(
-        schoolkid=schoolkid, points__lte=bad_mark)
+        schoolkid=schoolkid, points__lte=bad_mark_threshold)
     for mark in bad_marks:
         mark.points = 5
         mark.save()
@@ -32,24 +31,12 @@ def fix_chastisement(schoolkid):
     chastisements.delete()
 
 
-def show_lessons_count(schoolkid, subject):
-    lessons = Lesson.objects.filter(
-        year_of_study=schoolkid.year_of_study,
-        group_letter=schoolkid.group_letter.upper(),
-        subject__title=subject
-    ).order_by('date')
-
-    print(lessons.count())
-
-
 def create_commendation(schoolkid, subject, commendation_text):
-    lessons = Lesson.objects.filter(
+    lesson = Lesson.objects.filter(
         year_of_study=schoolkid.year_of_study,
         group_letter=schoolkid.group_letter.upper(),
         subject__title=subject
-    ).order_by('date')
-
-    lesson = random.choice(lessons)
+    ).last()
 
     Commendation.objects.create(
         schoolkid=schoolkid,
